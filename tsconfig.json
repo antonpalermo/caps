@@ -4,7 +4,8 @@
     "baseUrl": ".",
     "paths": {
       "@ui/*": ["src/components/ui/*"],
-      "@lib/*": ["src/libs/*"]
+      "@lib/*": ["src/libs/*"],
+      "@courses/*": ["src/components/courses/*"]
     },
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
