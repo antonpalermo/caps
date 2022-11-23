@@ -1,11 +1,12 @@
 import React from 'react'
 
+import { useRouter } from 'next/router'
 import { unstable_getServerSession } from 'next-auth'
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 
-import { options } from './api/auth/[...nextauth]'
 import { Role } from '@prisma/client'
-import { useRouter } from 'next/router'
+import { options } from './api/auth/[...nextauth]'
+import Head from 'next/head'
 
 export const getServerSideProps: GetServerSideProps = async ({
   req,
@@ -60,12 +61,18 @@ function RoleSelector() {
   }
 
   return (
-    <div>
-      <h1>Select your assigned role!</h1>
-      <button onClick={() => role('student')}>I'm a Student</button>
-      {/* TODO: add supporting docs for professor */}
-      <button onClick={() => role('professor')}>I'm a Professor</button>
-    </div>
+    <>
+      <Head>
+        <title>Pick your assigned role</title>
+      </Head>
+      <div>
+        <h1>Select your assigned role!</h1>
+        <button onClick={() => role('student')}>I'm a Student</button>
+        {/* TODO: add supporting docs for professor */}
+        <button onClick={() => role('professor')}>I'm a Professor</button>
+        <button onClick={() => role('professor')}>I'm a Professor</button>
+      </div>
+    </>
   )
 }
 

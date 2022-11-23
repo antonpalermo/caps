@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { ReactElement } from 'react'
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
+
+import MainLayout from '@ui/Layout'
 
 import { useSession } from 'next-auth/react'
 import { unstable_getServerSession } from 'next-auth'
@@ -48,6 +50,10 @@ function Home() {
       {loading && JSON.stringify(data)}
     </div>
   )
+}
+
+Home.getLayout = (page: ReactElement) => {
+  return <MainLayout title="Home">{page}</MainLayout>
 }
 
 export default Home
