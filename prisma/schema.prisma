@@ -55,6 +55,7 @@ model User {
   role          Role?
   accounts      Account[]
   sessions      Session[]
+  courses       Course[]
 
   @@map("users")
 }
@@ -70,8 +71,10 @@ model VerificationToken {
 
 model Course {
   id          String   @id @default(cuid())
-  name        String?
-  description String?
+  name        String?  @default("Untitled")
+  description String?  @default("Blank untitled template")
+  user        User?    @relation(fields: [userId], references: [id])
+  userId      String?
   dateCreated DateTime @default(now())
   dateUpdated DateTime @updatedAt
 
