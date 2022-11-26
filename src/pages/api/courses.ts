@@ -39,7 +39,7 @@ const handler = async (req: IncomingAPIRequest, res: NextApiResponse) => {
     if (error) {
       return res.status(500).json(error)
     }
-    return res.status(200).json({ data })
+    return res.status(200).json(data)
   }
 }
 
@@ -73,21 +73,19 @@ async function createTemplate(
  * get all available coureses.
  * @returns list of all available courses.
  */
-async function courses(): Promise<{
-  data: Course[] | null
-  error: { message: string } | null
-}> {
+async function courses() {
   try {
     // query all users and return them.
-    const courses = await prisma.course.findMany({
-      // include some user details.
-      include: { user: { select: { name: true, image: true } } }
-    })
+    return {
+      data: await prisma.course.findMany({
+        // include some user details.
+        include: { user: { select: { name: true, image: true } } }
+      })
+    }
     // return list of courses
-    return { data: courses, error: null }
   } catch (error) {
     console.log(error)
-    return { data: null, error: { message: 'unable to get all courses' } }
+    return { error: 'Unable to query all courses.' }
   }
 }
 

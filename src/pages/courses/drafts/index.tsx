@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic'
 
-const DynamicDrafts = dynamic(() => import('@courses/Drafts'), {
+const DynamicDrafts = dynamic(() => import('@courses/CourseDrafts'), {
   suspense: true
 })
 
