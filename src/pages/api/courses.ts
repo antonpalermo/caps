@@ -5,26 +5,26 @@ import { unstable_getServerSession } from 'next-auth'
 import { options } from './auth/[...nextauth]'
 import { Course, Role } from '@prisma/client'
 
-type IncomingAPIRequest = Omit<NextApiRequest, 'method'> & {
-  method: 'POST'
+type IncomingAPIRequest = Omit<NextApiRequest, 'method' | 'qe'> & {
+  method: 'POST' | 'GET'
+  query: { id?: string }
 }
 
 const handler = async (req: IncomingAPIRequest, res: NextApiResponse) => {
   const method = req.method
+  const { id } = req.query
   const session = await unstable_getServerSession(req, res, options)
-
-  // handler check if the user has professor role.
-  if (session.user.role !== Role.professor) {
-    // if not return error.
-    return res
-      .status(405)
-      .json({ error: { message: 'not allowed to create course.' } })
-  }
-
   // we only allow post method to create course template.
   if (method === 'POST') {
     // call create template code.
     const { data, error } = await createTemplate(session.user.email)
+    // handler check if the user has professor role.
+    if (session.user.role !== Role.professor) {
+      // if not return error.
+      return res
+        .status(405)
+        .json({ error: { message: 'not allowed to create course.' } })
+    }
 
     if (error) {
       // if error is present then return the error to the ui.
@@ -32,6 +32,14 @@ const handler = async (req: IncomingAPIRequest, res: NextApiResponse) => {
     }
     // return create course data.
     return res.status(201).json({ data })
+  }
+  // return get courses.
+  if (method === 'GET') {
+    const { data, error } = await courses()
+    if (error) {
+      return res.status(500).json(error)
+    }
+    return res.status(200).json({ data })
   }
 }
 
@@ -58,6 +66,28 @@ async function createTemplate(
       data: null,
       error: { message: 'Unable to create course template.' }
     }
+  }
+}
+
+/**
+ * get all available coureses.
+ * @returns list of all available courses.
+ */
+async function courses(): Promise<{
+  data: Course[] | null
+  error: { message: string } | null
+}> {
+  try {
+    // query all users and return them.
+    const courses = await prisma.course.findMany({
+      // include some user details.
+      include: { user: { select: { name: true, image: true } } }
+    })
+    // return list of courses
+    return { data: courses, error: null }
+  } catch (error) {
+    console.log(error)
+    return { data: null, error: { message: 'unable to get all courses' } }
   }
 }
 
