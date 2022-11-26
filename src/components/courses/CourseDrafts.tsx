@@ -33,12 +33,9 @@ export default function CourseDrafts() {
 
   return (
     <>
-      <Head>
-        <title>Drafts</title>
-      </Head>
       <h1>Course Drafts</h1>
       {data.map(course => (
-        <div>
+        <div key={course.id}>
           <h1>{course.name}</h1>
           <h2>Created: {course.user.name}</h2>
           <button onClick={() => handleEdit(course.id)}>edit</button>
