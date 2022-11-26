@@ -5,7 +5,8 @@
     "paths": {
       "@ui/*": ["src/components/ui/*"],
       "@lib/*": ["src/libs/*"],
-      "@courses/*": ["src/components/courses/*"]
+      "@courses/*": ["src/components/courses/*"],
+      "@auth/*": ["src/pages/api/auth/*"]
     },
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,

@@ -1,8 +1,8 @@
 import { ReactElement, Suspense } from 'react'
 import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 
-import { options } from '../api/auth/[...nextauth]'
-import { Session, unstable_getServerSession } from 'next-auth'
+import { options } from '@auth/[...nextauth]'
+import { unstable_getServerSession } from 'next-auth'
 
 import dynamic from 'next/dynamic'
 import MainLayout from '@ui/Layout'

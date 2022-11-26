@@ -35,10 +35,23 @@ const handler = async (req: IncomingAPIRequest, res: NextApiResponse) => {
   }
   // return get courses.
   if (method === 'GET') {
+    // if id is present then return single course.
+    if (id) {
+      const { data, error } = await course(id)
+      // if error is present then return error.
+      if (error) {
+        return res.status(500).json(error)
+      }
+      // else return the course result.
+      return res.status(200).json(data)
+    }
+    // get all courses.
     const { data, error } = await courses()
+    // if error is present then return error.
     if (error) {
       return res.status(500).json(error)
     }
+    // if id is not present in the request then return all courses.
     return res.status(200).json(data)
   }
 }
@@ -86,6 +99,23 @@ async function courses() {
   } catch (error) {
     console.log(error)
     return { error: 'Unable to query all courses.' }
+  }
+}
+
+/**
+ * return a single course.
+ * @param id course id
+ * @returns return course based on id provided.
+ */
+async function course(id: string) {
+  try {
+    // return data if try is okay.
+    return { data: await prisma.course.findUnique({ where: { id } }) }
+  } catch (error) {
+    // console log the error then return error.
+    console.log(error)
+    // console log the error then return error.
+    return { error: 'The requested details is not available.' }
   }
 }
 
