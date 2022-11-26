@@ -70,7 +70,6 @@ function RoleSelector() {
         <button onClick={() => role('student')}>I'm a Student</button>
         {/* TODO: add supporting docs for professor */}
         <button onClick={() => role('professor')}>I'm a Professor</button>
-        <button onClick={() => role('professor')}>I'm a Professor</button>
       </div>
     </>
   )

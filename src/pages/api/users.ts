@@ -1,9 +1,9 @@
 import { User } from '@prisma/client'
-import { NextApiRequest, NextApiResponse } from 'next'
-import { unstable_getServerSession } from 'next-auth'
+import { prisma } from '@lib/prismaClient'
 
-import { prisma } from '../../../libs/prismaClient'
-import { options } from '../auth/[...nextauth]'
+import { options } from '@auth/[...nextauth]'
+import { unstable_getServerSession } from 'next-auth'
+import { NextApiRequest, NextApiResponse } from 'next'
 
 type IncomingAPIRequest = Omit<NextApiRequest, 'method' | 'body'> & {
   method: 'PATCH'
