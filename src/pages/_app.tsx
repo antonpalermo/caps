@@ -13,8 +13,8 @@ function App({ Component, pageProps: { session, ...props } }: AppProps) {
   return (
     <SessionProvider session={session}>
       <QueryClientProvider client={client}>
-        <ReactQueryDevtools />
         {getLayout(<Component {...props} />)}
+        <ReactQueryDevtools />
       </QueryClientProvider>
     </SessionProvider>
   )
