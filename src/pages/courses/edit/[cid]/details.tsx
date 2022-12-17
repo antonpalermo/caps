@@ -3,10 +3,12 @@ import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 
 import Input from '@ui/Input'
 import Textarea from '@ui/Textarea'
+import CourseLayout from '@course/CourseLayout'
 
 import { options } from '@auth/[...nextauth]'
 import { unstable_getServerSession } from 'next-auth'
 import { Prisma } from '@prisma/client'
+import { ReactElement } from 'react'
 
 type Details = {
   name: string
@@ -88,4 +90,8 @@ export default function CourseDetails({ course }: CourseDetailsProps) {
       </Formik>
     </div>
   )
+}
+
+CourseDetails.getLayout = (page: ReactElement) => {
+  return <CourseLayout title="Course Details">{page}</CourseLayout>
 }
