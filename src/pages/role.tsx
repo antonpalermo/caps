@@ -1,4 +1,5 @@
 import React from 'react'
+import Head from 'next/head'
 
 import { useRouter } from 'next/router'
 import { unstable_getServerSession } from 'next-auth'
@@ -6,7 +7,6 @@ import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 
 import { Role } from '@prisma/client'
 import { options } from './api/auth/[...nextauth]'
-import Head from 'next/head'
 
 export const getServerSideProps: GetServerSideProps = async ({
   req,

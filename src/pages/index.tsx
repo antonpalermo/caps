@@ -30,7 +30,7 @@ export const getServerSideProps: GetServerSideProps = async ({
         permanent: false,
         destination: `${
           process.env.NEXTAUTH_URL
-        }/role_selector?return=${encodeURIComponent(resolvedUrl)}`
+        }/role?return=${encodeURIComponent(resolvedUrl)}`
       }
     }
   }

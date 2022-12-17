@@ -50,12 +50,9 @@ export default function CoursesPage({ courses }: CoursesPageProps) {
   })
 
   return (
-    <div>
-      <h1>Courses</h1>
-      <Suspense fallback={'Loading'}>
-        <CourseList courses={data} />
-      </Suspense>
-    </div>
+    <Suspense fallback={'Loading'}>
+      <CourseList courses={data} />
+    </Suspense>
   )
 }
 
