@@ -7,8 +7,8 @@ import { Prisma } from '@prisma/client'
 import { options } from '@auth/[...nextauth]'
 import { unstable_getServerSession } from 'next-auth'
 
+import Course from '@course/Course'
 import MainLayout from '@ui/Layout'
-import CourseList from '@course/CourseList'
 
 export const getServerSideProps: GetServerSideProps = async ({
   req,
@@ -50,9 +50,14 @@ export default function CoursesPage({ courses }: CoursesPageProps) {
   })
 
   return (
-    <Suspense fallback={'Loading'}>
-      <CourseList courses={data} />
-    </Suspense>
+    <div>
+      <h1>Courses</h1>
+      <Suspense fallback={'Loading'}>
+        {data.map(course => (
+          <Course key={course.id} course={course} />
+        ))}
+      </Suspense>
+    </div>
   )
 }
 
