@@ -1,51 +1,32 @@
+import { ReactElement } from 'react'
+import { GetServerSidePropsContext } from 'next'
 import { Form, Formik, FormikHelpers } from 'formik'
-import { GetServerSideProps, GetServerSidePropsContext } from 'next'
+
+import { Prisma } from '@prisma/client'
 
 import Input from '@ui/Input'
 import Textarea from '@ui/Textarea'
 import CourseLayout from '@course/CourseLayout'
 
-import { options } from '@auth/[...nextauth]'
-import { unstable_getServerSession } from 'next-auth'
-import { Prisma } from '@prisma/client'
-import { ReactElement } from 'react'
+import baseSSR from '@lib/baseSSR'
 
 type Details = {
   name: string
   description?: string
 }
 
-export const getServerSideProps: GetServerSideProps = async ({
-  query,
-  req,
-  res
-}: GetServerSidePropsContext) => {
-  const session = await unstable_getServerSession(req, res, options)
+export const getServerSideProps = baseSSR(
+  async ({ query }: GetServerSidePropsContext) => {
+    const endpoint = new URL(
+      `/api/courses?id=${query.cid}`,
+      process.env.BASE_URL
+    )
+    const request = await fetch(endpoint)
+    const course = await request.json()
 
-  if (!session) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: `${process.env.NEXTAUTH_URL}/api/auth/signin`
-      }
-    }
+    return !course ? { notFound: true } : { props: { course } }
   }
-
-  const endpoint = new URL(`/api/courses?id=${query.cid}`, process.env.BASE_URL)
-  const request = await fetch(endpoint)
-
-  const course = await request.json()
-
-  if (!course) {
-    return {
-      notFound: true
-    }
-  }
-
-  return {
-    props: { course }
-  }
-}
+)
 
 export type CourseDetailsProps = {
   course: Prisma.CourseGetPayload<{

@@ -1,44 +1,18 @@
 import React, { ReactElement } from 'react'
-import { GetServerSideProps, GetServerSidePropsContext } from 'next'
-
-import MainLayout from '@ui/Layout'
 
 import { useSession } from 'next-auth/react'
-import { unstable_getServerSession } from 'next-auth'
+import { GetServerSidePropsContext } from 'next'
 
-import { options } from './api/auth/[...nextauth]'
+import baseSSR from '@lib/baseSSR'
+import MainLayout from '@ui/Layout'
 
-export const getServerSideProps: GetServerSideProps = async ({
-  req,
-  res,
-  resolvedUrl
-}: GetServerSidePropsContext) => {
-  const session = await unstable_getServerSession(req, res, options)
-
-  if (!session) {
+export const getServerSideProps = baseSSR(
+  async (ctx: GetServerSidePropsContext) => {
     return {
-      redirect: {
-        permanent: false,
-        destination: `${process.env.NEXTAUTH_URL}/api/auth/signin`
-      }
+      props: {}
     }
   }
-
-  if (!session.user.role) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: `${
-          process.env.NEXTAUTH_URL
-        }/role?return=${encodeURIComponent(resolvedUrl)}`
-      }
-    }
-  }
-
-  return {
-    props: {}
-  }
-}
+)
 
 function Home() {
   const { data, status } = useSession()
