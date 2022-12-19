@@ -11,12 +11,20 @@ export type CourseLayoutProps = HTMLAttributes<HTMLDivElement> & {
 export default function CourseLayout({ ...props }: CourseLayoutProps) {
   const router = useRouter()
 
+  async function createCourseSection() {
+    const endpoint = new URL('', process.env.BASE_URL)
+  }
+
   return (
     <>
       <Head>
         <title>{props.title}</title>
       </Head>
+      <button onClick={createCourseSection}>Add Doc</button>
       <Link href={`/courses/edit/${router.query.cid}/details`}>Details</Link>
+      <Link href={`/courses/edit/${router.query.cid}/some_section`}>
+        Section
+      </Link>
       <div {...props} />
     </>
   )

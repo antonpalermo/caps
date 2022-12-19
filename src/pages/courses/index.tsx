@@ -15,9 +15,9 @@ import baseSSR from '@lib/baseSSR'
 export const getServerSideProps = baseSSR(
   async ({}: GetServerSidePropsContext) => {
     const endpoint = new URL('/api/courses', process.env.BASE_URL)
-    const request = await fetch(endpoint)
+    const courses = await fetcher(endpoint)
 
-    return { props: { courses: await request.json() } }
+    return { props: { courses } }
   }
 )
 
@@ -31,19 +31,19 @@ type CoursesPageProps = {
 
 export default function CoursesPage({ courses }: CoursesPageProps) {
   const router = useRouter()
-  const fetchCourses = async () => await (await fetch('/api/courses')).json()
+  const fetchCourses = async () => await fetcher('/api/courses')
   const { data } = useQuery<Course[]>('courses', fetchCourses, {
     initialData: courses,
     suspense: true
   })
 
   async function createCourse() {
-    const { data } = await fetcher('/api/courses', {
+    const course = await fetcher('/api/courses/create', {
       method: 'POST'
     })
 
     if (data) {
-      return router.push(`/courses/edit/${data.id}/details`)
+      return router.push(`/courses/edit/${course.id}/details`)
     }
 
     return
@@ -54,9 +54,7 @@ export default function CoursesPage({ courses }: CoursesPageProps) {
       <h1>Courses</h1>
       <button onClick={createCourse}>New</button>
       <Suspense fallback={'Loading'}>
-        {data.map(course => (
-          <Course key={course.id} course={course} />
-        ))}
+        {data && data.map(course => <Course key={course.id} course={course} />)}
       </Suspense>
     </div>
   )

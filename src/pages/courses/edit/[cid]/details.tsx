@@ -17,10 +17,7 @@ type Details = {
 
 export const getServerSideProps = baseSSR(
   async ({ query }: GetServerSidePropsContext) => {
-    const endpoint = new URL(
-      `/api/courses?id=${query.cid}`,
-      process.env.BASE_URL
-    )
+    const endpoint = new URL(`/api/courses/${query.cid}`, process.env.BASE_URL)
     const request = await fetch(endpoint)
     const course = await request.json()
 
