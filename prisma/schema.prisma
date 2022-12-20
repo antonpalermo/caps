@@ -75,9 +75,23 @@ model Course {
   description String?  @default("Blank untitled template")
   user        User?    @relation(fields: [userId], references: [id])
   userId      String?
+  docs        Doc[]
   dateCreated DateTime @default(now())
   dateUpdated DateTime @updatedAt
 
   @@unique([id])
   @@map("courses")
+}
+
+model Doc {
+  id          String   @id @default(cuid())
+  header      String?  @default("Untitled Document")
+  body        Json?
+  course      Course?  @relation(fields: [courseId], references: [id])
+  courseId    String?
+  dateCreated DateTime @default(now())
+  dateUpdated DateTime @updatedAt
+
+  @@unique([id])
+  @@map("docs")
 }

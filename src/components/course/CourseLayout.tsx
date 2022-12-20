@@ -1,8 +1,9 @@
-import { HTMLAttributes } from 'react'
+import { HTMLAttributes, useEffect } from 'react'
 
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
+import fetcher from '@lib/fetcher'
 
 export type CourseLayoutProps = HTMLAttributes<HTMLDivElement> & {
   title: string
@@ -12,8 +13,14 @@ export default function CourseLayout({ ...props }: CourseLayoutProps) {
   const router = useRouter()
 
   async function createCourseSection() {
-    const endpoint = new URL('', process.env.BASE_URL)
+    const doc = await fetcher(`/api/courses/${router.query.cid}/docs/create`)
+    if (!doc) {
+      return
+    }
+    router.push(`/courses/edit/${router.query.cid}/${doc.id}`)
   }
+
+  useEffect(() => {}, [])
 
   return (
     <>
