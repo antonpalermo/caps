@@ -85,7 +85,7 @@ model Course {
 
 model Doc {
   id          String   @id @default(cuid())
-  header      String?  @default("Untitled Document")
+  header      String
   body        Json?
   course      Course?  @relation(fields: [courseId], references: [id])
   courseId    String?

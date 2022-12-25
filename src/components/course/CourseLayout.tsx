@@ -1,10 +1,10 @@
-import { HTMLAttributes, useEffect } from 'react'
+import { HTMLAttributes, useEffect, useState } from 'react'
 
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import fetcher from '@lib/fetcher'
-import { useQuery, useQueryClient } from 'react-query'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { Doc } from '@prisma/client'
 
 export type CourseLayoutProps = HTMLAttributes<HTMLDivElement> & {
@@ -13,23 +13,34 @@ export type CourseLayoutProps = HTMLAttributes<HTMLDivElement> & {
 
 export default function CourseLayout({ ...props }: CourseLayoutProps) {
   const router = useRouter()
+  const queryClient = useQueryClient()
+
+  const [header, setHeader] = useState<string>()
 
   const fetchDocs = async () =>
     await fetcher(`/api/courses/${router.query.cid}/docs`)
 
-  const queryClient = useQueryClient()
+  const createDoc = async (header: string) =>
+    await fetcher(`/api/courses/${router.query.cid}/docs/create`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ header })
+    })
 
   const { data, isFetching } = useQuery<Doc[]>('docs', fetchDocs)
 
-  async function createCourseSection() {
-    const doc = await fetcher(`/api/courses/${router.query.cid}/docs/create`)
-    if (!doc) {
-      return
+  const mutation = useMutation(createDoc, {
+    onSuccess: data => {
+      queryClient.invalidateQueries('docs')
+      router.push(`/courses/edit/${router.query.cid}/${data.id}`)
     }
-    router.push(`/courses/edit/${router.query.cid}/${doc.id}`)
-  }
+  })
 
-  useEffect(() => {}, [])
+  async function createCourseSection() {
+    mutation.mutate(header)
+  }
 
   if (isFetching) {
     return <h1>Loading...</h1>
@@ -43,6 +54,15 @@ export default function CourseLayout({ ...props }: CourseLayoutProps) {
       <button onClick={createCourseSection}>Add Doc</button>
       <Link href={`/courses/edit/${router.query.cid}/details`}>Details</Link>
       <div>
+        <div>
+          <input
+            type="text"
+            name="header"
+            id="header"
+            value={header}
+            onChange={e => setHeader(e.target.value)}
+          />
+        </div>
         {data &&
           data.map(doc => (
             <>
