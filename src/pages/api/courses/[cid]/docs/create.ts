@@ -15,8 +15,6 @@ export default async function handler(
   req: IncomingApiRequest,
   res: NextApiResponse
 ) {
-  console.log('Doc Body: ', req.body)
-
   const { cid } = req.query
   const { header } = req.body
   const session = await unstable_getServerSession(req, res, options)
