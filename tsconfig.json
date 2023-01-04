@@ -6,7 +6,9 @@
       "@ui/*": ["src/components/ui/*"],
       "@lib/*": ["src/libs/*"],
       "@course/*": ["src/components/course/*"],
-      "@auth/*": ["src/pages/api/auth/*"]
+      "@auth/*": ["src/pages/api/auth/*"],
+
+      "@style/globals": ["src/globals.css"]
     },
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,

@@ -20,7 +20,7 @@ function Home() {
 
   return (
     <div>
-      <h1>Home Component</h1>
+      <h1 className='text-sm'>Home Component</h1>
       {loading && JSON.stringify(data)}
     </div>
   )

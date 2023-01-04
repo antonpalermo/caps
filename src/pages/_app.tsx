@@ -6,6 +6,8 @@ import { SessionProvider } from 'next-auth/react'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import { QueryClient, QueryClientProvider } from 'react-query'
 
+import '@style/globals'
+
 function App({ Component, pageProps: { session, ...props } }: AppProps) {
   const getLayout = Component.getLayout ?? ((page: ReactElement) => page)
   const client = new QueryClient()
